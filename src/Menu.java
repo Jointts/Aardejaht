@@ -50,24 +50,18 @@ public class Menu {
 
     @FXML
     public void startGame(){
-        int xInt = 0;
-        int yInt = 0;
-        int treasureCountInt = 0;
-        int totalTiles = 0;
+        int xInt;
+        int yInt;
+        int treasureCountInt;
         try {
             xInt = Integer.parseInt(xSize.getText());
             yInt = Integer.parseInt(ySize.getText());
             treasureCountInt = Integer.parseInt(treasureCount.getText());
+            main.getGame().getGame(xInt, yInt, treasureCountInt);
+            main.getGame().setActive();
         }catch(NumberFormatException e){
             System.out.println("Wrong input!");
         }
-        totalTiles = xInt * yInt;
-        System.out.println("X-Size: " + xInt);
-        System.out.println("Y-Size: " + yInt);
-        System.out.println("Total tiles: " + totalTiles);
-        System.out.println("Treasures: " + treasureCountInt);
-        main.getGame().getGame(xInt, yInt);
-        main.getGame().setActive();
     }
 
 }

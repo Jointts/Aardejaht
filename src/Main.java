@@ -11,7 +11,6 @@ public class Main extends Application{
 
     private Menu menu;
     private Game game;
-    private Actions actions;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,7 +21,6 @@ public class Main extends Application{
         //  Initalize classes
         setGame(new Game(window, this));
         setMenu(new Menu(window, this));
-        setActions(new Actions(this));
         //  By default we render out the main menu
         menu.setActive();
     }
@@ -43,11 +41,4 @@ public class Main extends Application{
         this.game = game;
     }
 
-    public Actions getActions() {
-        return actions;
-    }
-
-    public void setActions(Actions actions) {
-        this.actions = actions;
-    }
 }
