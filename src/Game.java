@@ -1,8 +1,10 @@
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -16,7 +18,7 @@ public class Game {
     private Main main;
     private int xSize;
     private int ySize;
-    private ObjectProperty<Tile>[][] board;
+    private Tile [][] board;
     Button button = new Button();
     StackPane layout = new StackPane();
     Scene scene = new Scene(layout, 300, 250);
@@ -29,10 +31,9 @@ public class Game {
     public void getGame(int xSize, int ySize){
         this.xSize = xSize;
         this.ySize = ySize;
-        board = new ObjectProperty[xSize][ySize];
         button.setText("It worked!");
-        BoardModel();
-        layout.getChildren().add(TileSet());
+        board = new Tile[xSize][ySize];
+        layout.getChildren().add(TileBoard());
     }
 
     public void setActive(){
@@ -40,28 +41,21 @@ public class Game {
         window.show();
     }
 
-    private void BoardModel() {
+    private Node TileBoard() {
         GridPane boardPane = new GridPane();
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
-                board[i][j] = new SimpleObjectProperty<>(new Tile());
+                board[i][j] = new Tile();
                 //  System.out.println(board[i][j]);
                 //  System.out.println(board[i][j].get().discovered);
-                board[i][j].get().discovered.setValue(Boolean.TRUE);
+                board[i][j].discovered.setValue(Boolean.TRUE);
+                board[i][j].setOnMouseEntered(event -> System.out.println("Hovered"));
+                board[i][j].setOnMouseExited(event -> System.out.println("Exited"));
+                board[i][j].setOnMouseClicked(event -> System.out.println("Clicked"));
+                boardPane.add(new StackPane(board[i][j]), i, j);
             }
         }
-    }
-
-    private Node TileSet(){
-        GridPane board = new GridPane();
-        for (int i = 0; i < xSize; i++) {
-            for (int j = 0; j < ySize; j++) {
-                Tile tile = new Tile();
-                tile.discovered.bind(this.board[0][0].get().discovered);
-                board.add(new StackPane(tile), i, j);
-            }
-        }
-        return board;
+        return boardPane;
     }
 
 }

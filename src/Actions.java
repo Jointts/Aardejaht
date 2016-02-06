@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 /**
  * Created by joonas on 4.02.16.
  */
-public class Actions {
+public class Actions implements EventHandler<ActionEvent>{
 
     private Main main;
 
@@ -21,5 +21,10 @@ public class Actions {
 
     public void startGame() {
         menu.setActive();
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        System.out.println(event.getEventType());
     }
 }
