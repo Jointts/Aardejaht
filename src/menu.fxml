@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <VBox prefHeight="341.0" prefWidth="501.0" BorderPane.alignment="CENTER">
          <children>
@@ -24,7 +24,7 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="X" />
-                        <TextField promptText="5">
+                        <TextField fx:id="xSize" promptText="5">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin></TextField>
@@ -33,7 +33,7 @@
                   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="Y" />
-                        <TextField promptText="5">
+                        <TextField fx:id="ySize" promptText="5">
                            <VBox.margin>
                               <Insets right="10.0" />
                            </VBox.margin></TextField>
@@ -52,14 +52,14 @@
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label text="Aardeid" textAlignment="CENTER" />
-                        <TextField alignment="CENTER" promptText="5" />
+                        <TextField fx:id="treasureCount" alignment="CENTER" promptText="5" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Alusta" textAlignment="CENTER" />
+                  <Button fx:id="button" onAction="#startGame" mnemonicParsing="false" text="Alusta" textAlignment="CENTER" />
                </children>
             </HBox>
          </children>

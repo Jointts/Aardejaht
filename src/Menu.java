@@ -1,65 +1,73 @@
-import com.sun.org.apache.xml.internal.security.Init;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Created by joonas on 4.02.16.
  */
-public class Menu implements Initializable {
+public class Menu {
 
+    final int MAX_X_SIZE = 10;
+    final int MAX_Y_SIZE = 10;
     private Stage window;
-    private Actions actions;
-    private StackPane layout;
-    private Parent root;
+    private Main main;
     private Scene scene;
     @FXML
     Button button = new Button();
-    Label xSizeLabel = new Label();
-    Label ySizeLabel = new Label();
-    TextArea xSize = new TextArea();
-    TextArea ySize = new TextArea();
+    @FXML
+    TextField xSize = new TextField();
+    @FXML
+    TextField ySize = new TextField();
+    @FXML
+    TextField treasureCount = new TextField();
 
-    public Menu(Stage window, Actions actions){
+    public Menu(Stage window, Main main){
+        System.out.println("Menu initalized!");
         this.window = window;
-        this.actions = actions;
+        this.main = main;
     }
 
-    public void getMenu(){
+    public void setActive(){
         window.setTitle("Aardejaht");
+        FXMLLoader fxml = new FXMLLoader(getClass().getResource("menu.fxml"));
+        fxml.setController(this);
         try {
-            root = FXMLLoader.load(getClass().getResource("menu.fxml"));
-            scene = new Scene(root, 300, 250);
+            Parent root = fxml.load();
+            scene = new Scene(root, 700, 500);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("!!!Failed to load menu.fxml!!!");
         }
-    }
-
-    public void setActive(){
         window.setScene(scene);
         window.show();
     }
 
+    @FXML
     public void startGame(){
-        button.setText("OMG IT WORKS!");
+        int xInt = 0;
+        int yInt = 0;
+        int treasureCountInt = 0;
+        int totalTiles = 0;
+        try {
+            xInt = Integer.parseInt(xSize.getText());
+            yInt = Integer.parseInt(ySize.getText());
+            treasureCountInt = Integer.parseInt(treasureCount.getText());
+        }catch(NumberFormatException e){
+            System.out.println("Wrong input!");
+        }
+        totalTiles = xInt * yInt;
+        System.out.println("X-Size: " + xInt);
+        System.out.println("Y-Size: " + yInt);
+        System.out.println("Total tiles: " + totalTiles);
+        System.out.println("Treasures: " + treasureCountInt);
+        main.getGame().getGame(xInt, yInt);
+        main.getGame().setActive();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("Menu initialized!");
-    }
 }

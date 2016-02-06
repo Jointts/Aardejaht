@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 /**
  * Created by joonas on 4.02.16.
  */
-public class Actions implements EventHandler<ActionEvent>{
+public class Actions {
 
     private Main main;
 
@@ -15,29 +15,11 @@ public class Actions implements EventHandler<ActionEvent>{
 
     public Actions(Main main){
         this.main = main;
+        this.game = main.getGame();
+        this.menu = main.getMenu();
     }
 
-    @Override
-    public void handle(ActionEvent event) {
-        if(event.getSource()==menu.button){
-            game.getGame();
-            game.setActive();
-        }
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public Menu getMenu() {
-        return menu;
-    }
-
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void startGame() {
+        menu.setActive();
     }
 }
