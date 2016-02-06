@@ -2,7 +2,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
-import javafx.scene.effect.LightingBuilder;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
@@ -17,10 +16,12 @@ public class Tile extends Region{
     Light.Distant light = new Light.Distant();
     SimpleIntegerProperty xPos = new SimpleIntegerProperty();
     SimpleIntegerProperty yPos = new SimpleIntegerProperty();
+    SimpleBooleanProperty isTreasure = new SimpleBooleanProperty();
 
     public Tile(int xPos, int yPos){
         this.xPos.setValue(xPos);
         this.yPos.setValue(yPos);
+        isTreasure.setValue(Boolean.FALSE);
         discovered.setValue(Boolean.FALSE);
         setStyle("-fx-background-color: #575757");
         light.setAzimuth(-135);

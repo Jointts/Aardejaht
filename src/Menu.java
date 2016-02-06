@@ -57,8 +57,7 @@ public class Menu {
             xInt = Integer.parseInt(xSize.getText());
             yInt = Integer.parseInt(ySize.getText());
             treasureCountInt = Integer.parseInt(treasureCount.getText());
-            main.getGame().getGame(xInt, yInt, treasureCountInt);
-            main.getGame().setActive();
+            main.getGame().setActive(xInt, yInt, treasureCountInt);
         }catch(NumberFormatException e){
             System.out.println("Wrong input!");
         }
