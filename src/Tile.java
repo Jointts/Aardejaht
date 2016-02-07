@@ -1,5 +1,6 @@
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.Cursor;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.layout.Region;
@@ -17,6 +18,7 @@ public class Tile extends Region{
     SimpleIntegerProperty xPos = new SimpleIntegerProperty();
     SimpleIntegerProperty yPos = new SimpleIntegerProperty();
     SimpleBooleanProperty isTreasure = new SimpleBooleanProperty();
+    SimpleBooleanProperty asdasdsa = new SimpleBooleanProperty();
 
     public Tile(int xPos, int yPos){
         this.xPos.setValue(xPos);
@@ -33,6 +35,7 @@ public class Tile extends Region{
     }
 
     public void exitTile(){
+        setCursor(Cursor.DEFAULT);
         if(!discovered.getValue()){
             setStyle("-fx-background-color: #575757");
         }
@@ -41,6 +44,7 @@ public class Tile extends Region{
     public void hoverTile(){
         if(!discovered.getValue()){
             setStyle("-fx-background-color: #a3a3a3");
+            setCursor(Cursor.HAND);
         }
     }
 

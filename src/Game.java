@@ -1,3 +1,4 @@
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -37,8 +38,8 @@ public class Game {
         layout.getChildren().add(TileBoard());
         Random rand = new Random();
         for(int count = 0; count <= treasureCount; count++){
-            int x = rand.nextInt(xSize);
-            int y = rand.nextInt(ySize);
+            int x = rand.nextInt(xSize - 1) + 1;
+            int y = rand.nextInt(ySize - 1) + 1;
             AddTreasure(x, y);
         }
         window.setScene(scene);
@@ -75,6 +76,7 @@ public class Game {
     }
 
     private void exposeTile(Tile tile){
+        tile.setCursor(Cursor.DEFAULT);
         if(tile.isTreasure.getValue()){
             tile.setStyle("-fx-background-color: #a01018");
         }else {
