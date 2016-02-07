@@ -28,7 +28,6 @@ public class Menu {
     TextField treasureCount = new TextField();
 
     public Menu(Stage window, Main main){
-        System.out.println("Menu initalized!");
         this.window = window;
         this.main = main;
     }

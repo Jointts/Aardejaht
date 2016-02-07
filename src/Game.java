@@ -1,7 +1,10 @@
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -22,7 +25,7 @@ public class Game {
     private int treasureCount;
     private Tile [][] board;
     StackPane layout = new StackPane();
-    Scene scene = new Scene(layout, 300, 250);
+    Scene scene;
     GridPane boardPane = new GridPane();
 
     public Game(Stage window, Main main) {
@@ -31,17 +34,23 @@ public class Game {
     }
 
     public void setActive(int xSize, int ySize, int treasureCount){
+        int sceneWidth = xSize * 50;
+        int sceneHeight = ySize * 50;
+        this.scene = new Scene(layout, sceneWidth, sceneHeight);
         this.xSize = xSize;
         this.ySize = ySize;
         this.treasureCount = treasureCount;
+        int treasuresMade = 0;
         board = new Tile[xSize][ySize];
         layout.getChildren().add(TileBoard());
         Random rand = new Random();
-        for(int count = 0; count <= treasureCount; count++){
-            int x = rand.nextInt(xSize - 1) + 1;
-            int y = rand.nextInt(ySize - 1) + 1;
+        for(int count = 0; count < treasureCount; count++){
+            int x = rand.nextInt(xSize);
+            int y = rand.nextInt(ySize);
             AddTreasure(x, y);
+            treasuresMade++;
         }
+        System.out.println("Times called: " + treasuresMade);
         window.setScene(scene);
         window.show();
     }
@@ -57,13 +66,18 @@ public class Game {
                     newTile.revealTile();
                     exposeTile(newTile);
                 });
-                boardPane.add(new StackPane(newTile), i, j);
+                StackPane tilePane = new StackPane(newTile);
+                tilePane.setAlignment(Pos.CENTER);
+                boardPane.add(tilePane, i, j);
             }
         }
         return boardPane;
     }
 
     public void AddTreasure(int x, int y){
+        System.out.println("-----------------");
+        System.out.println("X: " + x);
+        System.out.println("Y: " + y);
         Tile treasureTile = board[x][y];
         treasureTile.isTreasure.setValue(Boolean.TRUE);
         for(int xScan = x-1; xScan <= x+1 && xScan < xSize; xScan++){
@@ -78,12 +92,13 @@ public class Game {
     private void exposeTile(Tile tile){
         tile.setCursor(Cursor.DEFAULT);
         if(tile.isTreasure.getValue()){
-            tile.setStyle("-fx-background-color: #a01018");
+            Image treasureImage = new Image("img/treasure.png");
+            ImageView treasureImageView = new ImageView(treasureImage);
+            boardPane.add(treasureImageView, tile.xPos.get(), tile.yPos.get());
         }else {
             Label tileNumber = new Label();
             tileNumber.setText(String.valueOf(tile.adjacency.getValue()));
-            tileNumber.setTextFill(Color.web("#0099ff"));
-            tileNumber.setTextAlignment(TextAlignment.CENTER);
+            tileNumber.setStyle("-fx-font-weight: bold; -fx-text-fill: #0099ff;");
             boardPane.add(tileNumber, tile.xPos.getValue(), tile.yPos.getValue());
         }
     }
