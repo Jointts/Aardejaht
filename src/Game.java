@@ -1,7 +1,10 @@
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -94,8 +97,11 @@ public class Game {
         if(tile.isTreasure.getValue()){
             Image treasureImage = new Image("img/treasure.png");
             ImageView treasureImageView = new ImageView(treasureImage);
+            GridPane.setHalignment(treasureImageView, HPos.CENTER); // To align horizontally in the cell
+            GridPane.setValignment(treasureImageView, VPos.CENTER); // To align vertically in the cell
             boardPane.add(treasureImageView, tile.xPos.get(), tile.yPos.get());
         }else {
+            StackPane pane = new StackPane();
             Label tileNumber = new Label();
             tileNumber.setText(String.valueOf(tile.adjacency.getValue()));
             tileNumber.setStyle("-fx-font-weight: bold; -fx-text-fill: #0099ff;");
