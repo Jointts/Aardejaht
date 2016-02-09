@@ -116,6 +116,7 @@ public class Game {
         }
     }
 
+    //  Recursive method to reveal adjacent 0 tiles
     private void nullReveal(Tile tile){
         for(int xScan = tile.xPos.getValue()-1; xScan <= tile.xPos.getValue()+1 && xScan < xSize; xScan++){
             for(int yScan = tile.yPos.getValue()-1; yScan <= tile.yPos.getValue()+1 && yScan < ySize; yScan++){
