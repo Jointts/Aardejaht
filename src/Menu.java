@@ -32,6 +32,7 @@ public class Menu {
         this.main = main;
     }
 
+    //  Initializing method for the game (Called on application start-up)
     public void setActive(){
         window.setTitle("Aardejaht");
         FXMLLoader fxml = new FXMLLoader(getClass().getResource("menu.fxml"));
@@ -48,6 +49,7 @@ public class Menu {
     }
 
     @FXML
+    //  Gets the parameters from the form, then sets GAME scene active and passes the arguments
     public void startGame(){
         int xInt;
         int yInt;

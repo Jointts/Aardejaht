@@ -1,3 +1,4 @@
+import javafx.beans.binding.Bindings;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -10,9 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import sun.font.TextLabel;
 
 import java.util.Random;
 
@@ -26,8 +26,9 @@ public class Game {
     private int xSize;
     private int ySize;
     private int treasureCount;
+    private Score score;
     private Tile [][] board;
-    StackPane layout = new StackPane();
+    GridPane layout = new GridPane();
     Scene scene;
     GridPane boardPane = new GridPane();
 
@@ -36,6 +37,7 @@ public class Game {
         this.main = main;
     }
 
+    //  Initializing method for the game (Also used to change the scene to GAME)
     public void setActive(int xSize, int ySize, int treasureCount){
         int sceneWidth = xSize * 50;
         int sceneHeight = ySize * 50;
@@ -43,21 +45,22 @@ public class Game {
         this.xSize = xSize;
         this.ySize = ySize;
         this.treasureCount = treasureCount;
-        int treasuresMade = 0;
+        scene.getStylesheets().add("css/main.css");
         board = new Tile[xSize][ySize];
-        layout.getChildren().add(TileBoard());
-        Random rand = new Random();
-        for(int count = 0; count < treasureCount; count++){
-            int x = rand.nextInt(xSize);
-            int y = rand.nextInt(ySize);
-            AddTreasure(x, y);
-            treasuresMade++;
-        }
-        System.out.println("Times called: " + treasuresMade);
+        score = new Score(treasureCount);
+        GridPane gameMenu = new GridPane();
+        gameMenu.add(getMenuButton(), 1, 1);
+        gameMenu.add(getScoresButton(), 2, 1);
+        gameMenu.add(getMoveCounter(), 5, 1);
+        gameMenu.add(getTreasureCounter(), 4, 1);
+        layout.add(TileBoard(), 0, 0, xSize, ySize);
+        layout.add(gameMenu, 0, ySize, 5, 1);
+        generateTreasures();
         window.setScene(scene);
         window.show();
     }
 
+    //  Generates the initial blank-tiles display, and also passes Tile objects to a public array
     private Node TileBoard() {
         for (int i = 0; i < xSize; i++) {
             for (int j = 0; j < ySize; j++) {
@@ -65,10 +68,7 @@ public class Game {
                 Tile newTile = board[i][j];
                 newTile.setOnMouseEntered(event -> newTile.hoverTile());
                 newTile.setOnMouseExited(event -> newTile.exitTile());
-                newTile.setOnMouseClicked(event -> {
-                    newTile.revealTile();
-                    exposeTile(newTile);
-                });
+                newTile.setOnMouseClicked(event -> exposeTile(newTile));
                 StackPane tilePane = new StackPane(newTile);
                 tilePane.setAlignment(Pos.CENTER);
                 boardPane.add(tilePane, i, j);
@@ -77,10 +77,8 @@ public class Game {
         return boardPane;
     }
 
+    //  Adds a treasure to the provided coordinates and also adds adjacency +1 to its surrounding tiles
     public void AddTreasure(int x, int y){
-        System.out.println("-----------------");
-        System.out.println("X: " + x);
-        System.out.println("Y: " + y);
         Tile treasureTile = board[x][y];
         treasureTile.isTreasure.setValue(Boolean.TRUE);
         for(int xScan = x-1; xScan <= x+1 && xScan < xSize; xScan++){
@@ -92,21 +90,79 @@ public class Game {
         }
     }
 
-    private void exposeTile(Tile tile){
-        tile.setCursor(Cursor.DEFAULT);
-        if(tile.isTreasure.getValue()){
-            Image treasureImage = new Image("img/treasure.png");
-            ImageView treasureImageView = new ImageView(treasureImage);
-            GridPane.setHalignment(treasureImageView, HPos.CENTER); // To align horizontally in the cell
-            GridPane.setValignment(treasureImageView, VPos.CENTER); // To align vertically in the cell
-            boardPane.add(treasureImageView, tile.xPos.get(), tile.yPos.get());
-        }else {
-            StackPane pane = new StackPane();
-            Label tileNumber = new Label();
-            tileNumber.setText(String.valueOf(tile.adjacency.getValue()));
-            tileNumber.setStyle("-fx-font-weight: bold; -fx-text-fill: #0099ff;");
-            boardPane.add(tileNumber, tile.xPos.getValue(), tile.yPos.getValue());
+    // Generates random coordinates and calls the AddTreasure function
+    public void generateTreasures(){
+        Random rand = new Random();
+        for(int count = 0; count < treasureCount; count++){
+            int x = rand.nextInt(xSize);
+            int y = rand.nextInt(ySize);
+            AddTreasure(x, y);
         }
+    }
+
+    //  Exposes the tile
+    private void exposeTile(Tile tile){
+        tile.revealTile();
+        tile.setCursor(Cursor.DEFAULT);
+        score.moves.setValue(score.moves.getValue() + 1);
+        if(tile.isTreasure.getValue()){
+            score.treasuresLeft.setValue(score.treasuresLeft.getValue() - 1);
+            boardPane.add(getTreasureTile(), tile.xPos.get(), tile.yPos.get());
+        }else {
+            boardPane.add(getNumberTile(tile), tile.xPos.getValue(), tile.yPos.getValue());
+        }
+    }
+
+    //  Provides the display for the Menu button
+    private Button getMenuButton(){
+        Button menuButton = new Button("Menu");
+        menuButton.setPrefSize(75, 25);
+        menuButton.setOnMouseClicked(event -> main.getMenu().setActive());
+        menuButton.setOnMouseEntered(event -> menuButton.setCursor(Cursor.HAND));
+        menuButton.setId("menuButton");
+        return menuButton;
+    }
+
+    //  Provides the display for the Scores button
+    private Button getScoresButton(){
+        Button scoreButton = new Button("Scores");
+        scoreButton.setPrefSize(75, 25);
+        scoreButton.setOnMouseEntered(event -> scoreButton.setCursor(Cursor.HAND));
+        scoreButton.setId("menuButton");
+        return scoreButton;
+    }
+
+    //  Provides the display for counting player moves
+    private Label getMoveCounter(){
+        Label scoreText = new Label();
+        scoreText.textProperty().bind(Bindings.convert(score.moves));
+        return scoreText;
+    }
+
+    //  Provides the display for counting how many treasures are left
+    private Label getTreasureCounter(){
+        Label treasureText = new Label();
+        treasureText.textProperty().bind(Bindings.convert(score.treasuresLeft));
+        return treasureText;
+    }
+
+    //  Provides the display for a tile that has no treasure
+    private Label getNumberTile(Tile tile){
+        Label tileNumber = new Label();
+        tileNumber.setText(String.valueOf(tile.adjacency.getValue()));
+        tileNumber.setStyle("-fx-font-weight: bold; -fx-text-fill: #ffa717;");
+        GridPane.setHalignment(tileNumber, HPos.CENTER); // To align horizontally in the cell
+        GridPane.setValignment(tileNumber, VPos.CENTER); // To align vertically in the cell
+        return tileNumber;
+    }
+
+    //  Provides the display for a tile that has a treasure
+    private ImageView getTreasureTile(){
+        Image treasureImage = new Image("img/treasure.png");
+        ImageView treasureImageView = new ImageView(treasureImage);
+        GridPane.setHalignment(treasureImageView, HPos.CENTER); // To align horizontally in the cell
+        GridPane.setValignment(treasureImageView, VPos.CENTER); // To align vertically in the cell
+        return treasureImageView;
     }
 
 }

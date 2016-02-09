@@ -12,7 +12,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage window) throws Exception {
-        //  Initalize classes
+        //  Initialize classes
         setGame(new Game(window, this));
         setMenu(new Menu(window, this));
         //  By default we render out the main menu
