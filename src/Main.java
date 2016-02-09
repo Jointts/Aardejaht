@@ -5,6 +5,7 @@ public class Main extends Application{
 
     private Menu menu;
     private Game game;
+    private Stage window;
 
     public static void main(String[] args) {
         launch(args);
@@ -13,7 +14,7 @@ public class Main extends Application{
     @Override
     public void start(Stage window) throws Exception {
         //  Initialize classes
-        setGame(new Game(window, this));
+        this.window = window;
         setMenu(new Menu(window, this));
         //  By default we render out the main menu
         menu.setActive();
@@ -35,4 +36,11 @@ public class Main extends Application{
         this.game = game;
     }
 
+    public Stage getWindow() {
+        return window;
+    }
+
+    public void setWindow(Stage window) {
+        this.window = window;
+    }
 }

@@ -12,7 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import sun.font.TextLabel;
 
 import java.util.Random;
 
@@ -117,7 +116,11 @@ public class Game {
     private Button getMenuButton(){
         Button menuButton = new Button("Menu");
         menuButton.setPrefSize(75, 25);
-        menuButton.setOnMouseClicked(event -> main.getMenu().setActive());
+        menuButton.setOnMouseClicked(event -> {
+            window.close();
+            window.setScene(null);
+            main.getMenu().setActive();
+        });
         menuButton.setOnMouseEntered(event -> menuButton.setCursor(Cursor.HAND));
         menuButton.setId("menuButton");
         return menuButton;
@@ -135,6 +138,7 @@ public class Game {
     //  Provides the display for counting player moves
     private Label getMoveCounter(){
         Label scoreText = new Label();
+        scoreText.setPrefSize(50, 25);
         scoreText.textProperty().bind(Bindings.convert(score.moves));
         return scoreText;
     }
