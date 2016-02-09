@@ -13,7 +13,6 @@ public class Main extends Application{
 
     @Override
     public void start(Stage window) throws Exception {
-        //  Initialize classes
         this.window = window;
         setMenu(new Menu(window, this));
         //  By default we render out the main menu
