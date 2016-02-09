@@ -46,7 +46,7 @@ public class Game {
         this.treasureCount = treasureCount;
         scene.getStylesheets().add("css/main.css");
         board = new Tile[xSize][ySize];
-        score = new Score(treasureCount);
+        score = new Score(treasureCount, String.valueOf(xSize), String.valueOf(ySize));
         GridPane gameMenu = new GridPane();
         gameMenu.add(getMenuButton(), 1, 1);
         gameMenu.add(getScoresButton(), 2, 1);
@@ -101,7 +101,11 @@ public class Game {
 
     //  Exposes the tile
     private void exposeTile(Tile tile){
+        if(tile.discovered.getValue()){return;}
         tile.revealTile();
+        if(tile.adjacency.getValue() < 1){
+            nullReveal(tile);
+        }
         tile.setCursor(Cursor.DEFAULT);
         score.moves.setValue(score.moves.getValue() + 1);
         if(tile.isTreasure.getValue()){
@@ -109,6 +113,15 @@ public class Game {
             boardPane.add(getTreasureTile(), tile.xPos.get(), tile.yPos.get());
         }else {
             boardPane.add(getNumberTile(tile), tile.xPos.getValue(), tile.yPos.getValue());
+        }
+    }
+
+    private void nullReveal(Tile tile){
+        for(int xScan = tile.xPos.getValue()-1; xScan <= tile.xPos.getValue()+1 && xScan < xSize; xScan++){
+            for(int yScan = tile.yPos.getValue()-1; yScan <= tile.yPos.getValue()+1 && yScan < ySize; yScan++){
+                if(yScan < 0 | xScan < 0){continue;}
+                exposeTile(board[xScan][yScan]);
+            }
         }
     }
 
