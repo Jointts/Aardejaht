@@ -18,6 +18,7 @@ public class Menu {
     private Stage window;
     private Main main;
     private Scene scene;
+
     @FXML
     Button button = new Button();
     @FXML
@@ -27,8 +28,8 @@ public class Menu {
     @FXML
     TextField treasureCount = new TextField();
 
-    public Menu(Stage window, Main main){
-        this.window = window;
+    public Menu(Main main){
+        this.window = main.getWindow();
         this.main = main;
     }
 
@@ -60,7 +61,7 @@ public class Menu {
             treasureCountInt = Integer.parseInt(treasureCount.getText());
             main.setGame(new Game(main.getWindow(), main));
             main.getGame().setActive(xInt, yInt, treasureCountInt);
-        }catch(NumberFormatException e){
+        } catch (NumberFormatException e){
             System.out.println("Wrong input!");
         }
     }
